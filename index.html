@@ -35,21 +35,48 @@
 
 <p>This is my #826 Fisher-Price tape recorder. Manufactured January 21, 1987 (as stamped in the battery compartment).</p>
 
-<p>I used it constantly when I was a kid. When I found it again in 2015, it didn’t work anymore. The problem was probably just a broken or missing belt, which I could have replaced. Instead, I made some deeper changes - I converted it into a Bluetooth speaker.</p>
+<p>I used it constantly when I was a kid. When I found it again in 2015, it didn’t work anymore. The problem was probably just a broken or missing belt, which I could have replaced. Instead, I made some deeper changes - I <strong>converted it into a Bluetooth speaker</strong>.</p>
 
 <h3>
 <a id="a-look-inside" class="anchor" href="#a-look-inside" aria-hidden="true"><span class="octicon octicon-link"></span></a>A Look Inside</h3>
 
-<p>The #826 tape recorder is quite easy to open up - just six screws on the back, and then the back pops right off.</p>
+<p>The #826 tape recorder is quite easy to open up - just six screws on the back, and then the entire back slides right off.</p>
 
-<p>There’s a 3” speaker mounted to the back of the case. I was hoping to re-use the speaker as-is, but measured it to have an impedance of 32Ω, which I thought might be a little high for the amplifier components designed for 8Ω speakers that I was planning on using. I decided to give it a try anyway, though - I could always replace it later.</p>
+<p><img src="images/case_interior_horizontal.jpg" alt="Case interior"></p>
+
+<p>There’s a 3” speaker mounted to the back of the case. I was hoping to re-use the speaker as-is, but measured it to have an impedance of 32Ω, which I thought might be a little high for the amplifier components designed for 8Ω speakers that I was planning on using. I stuck with the original speaker at first, which seemed to work, but eventually I replaced it with an 8Ω speaker of the same size.</p>
+
+<p><img src="images/case_interior_closeup.jpg" alt="Case interior closeup"></p>
+
+<p>This is a closer view of most of the mechanical and electronic components, with the belt mechanism (visible in the previous image) already removed. There are a fair number of mechanical springs, plastic levers, etc. that are used to control the tape deck. I did not want to simply remove these, because I wanted to try to maintain the original feel of the buttons, and I thought keeping the springs intact would be the easiest way to do so.</p>
+
+<p>There was a single PCB in a slot near the right side of the case. I did not intend to reuse any of its electronics. The interesting part here was the volume knob, which I wanted to remain functional. It was attached directly to a potentiometer on the PCB. To get a value from the volume knob, I would either have to keep the existing potentiometer in place and measure it digitally, or replace it with another sensor that fit the volume knob and would sit at the correct location in the case. I decided to replace the PCB and potentiometer, as that gave me the flexibility to use a rotary encoder instead of a potentiometer, and removing the PCB introduced more space for my components around where the PCB used to be. </p>
+
+<p><img src="images/case_interior_fronthalf.jpg" alt="Case interior front half (middle section removed)"></p>
+
+<p>This is the front half of the case, with the middle section of the case removed - this was the most I would ever disassemble the tape recorder. I took it apart this far to remove the thick grey wires for the microphone. I did not intend to try to reuse the microphone, and the microphone wires were in the way taking up a lot of space.(although subsequently, using the tape recorder as a giant Bluetooth headset has come up in conversation - maybe I will someday regret removing the microphone wires).</p>
+
+<p>The underside of the play/forward/rewind/record buttons can also be seen in this image. They push down on the slotted metal bars, which then push on the various levers and switches that control the tape deck. Getting the buttons to fit into their hinges and sit on the metal bars just right is very annoying - every time I open the case and disturb the button mechanism, I have to spent a bunch of time jiggling the buttons back into place.</p>
+
+<p><img src="images/case_interior_pcb.jpg" alt="Case interior PCB"></p>
+
+<p>This is a view of the (blurry) battery compartment and the (in-focus, more or less) PCB. You can see how the volume knob is mounted to the potentiometer. I power the whole project off of C batteries in the original battery compartment.</p>
 
 <h3>
-<a id="components-and-construction" class="anchor" href="#components-and-construction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Components and Construction</h3>
+<a id="audio-components" class="anchor" href="#audio-components" aria-hidden="true"><span class="octicon octicon-link"></span></a>Audio Components</h3>
 
 <p>Almost all of the parts I used came from <a href="https://www.sparkfun.com">SparkFun</a>, an excellent source of easy-to-use and well-documented hobbyist electronics components.</p>
 
 <p>The core of the project is a <a href="http://www.microchip.com/wwwproducts/Devices.aspx?product=RN52">Roving Networks RN-52 Bluetooth Audio module</a> (mounted to SparkFun’s <a href="https://www.sparkfun.com/products/12849">breakout board</a> for this module).</p>
+
+<h3>
+<a id="power" class="anchor" href="#power" aria-hidden="true"><span class="octicon octicon-link"></span></a>Power</h3>
+
+<h3>
+<a id="volume-control" class="anchor" href="#volume-control" aria-hidden="true"><span class="octicon octicon-link"></span></a>Volume Control</h3>
+
+<h3>
+<a id="button-controls" class="anchor" href="#button-controls" aria-hidden="true"><span class="octicon octicon-link"></span></a>Button Controls</h3>
       </section>
     </div>
 
