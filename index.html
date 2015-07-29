@@ -44,7 +44,7 @@
 
 <p><img src="images/case_interior_horizontal.jpg" alt="Case interior"></p>
 
-<p>There’s a 3” speaker mounted to the back of the case. I was hoping to re-use the speaker as-is, but measured it to have an impedance of 32Ω, which I thought might be a little high for the amplifier components designed for 8Ω speakers that I was planning on using. I stuck with the original speaker at first, which seemed to work, but eventually I replaced it with an 8Ω speaker of the same size.</p>
+<p>There’s a 3" speaker mounted to the back of the case. I was hoping to re-use the speaker as-is, but measured it to have an impedance of 32Ω, which I thought might be a little high for the amplifier components designed for 8Ω speakers that I was planning on using. I stuck with the original speaker at first, which seemed to work, but eventually I replaced it with an 8Ω speaker of the same size.</p>
 
 <p><img src="images/case_interior_closeup.jpg" alt="Case interior closeup"></p>
 
@@ -54,9 +54,9 @@
 
 <p><img src="images/case_interior_fronthalf.jpg" alt="Case interior front half (middle section removed)"></p>
 
-<p>This is the front half of the case, with the middle section of the case removed - this was the most I would ever disassemble the tape recorder. I took it apart this far to remove the thick grey wires for the microphone. I did not intend to try to reuse the microphone, and the microphone wires were in the way taking up a lot of space.(although subsequently, using the tape recorder as a giant Bluetooth headset has come up in conversation - maybe I will someday regret removing the microphone wires).</p>
+<p>This is the front half of the case, with the middle section of the case removed - this was the most I would ever disassemble the tape recorder. I took it apart this far to remove the thick grey wires for the microphone. I did not intend to try to reuse the microphone, and the microphone wires were in the way taking up a lot of space (although subsequently, using the tape recorder as a giant Bluetooth headset has come up in conversation - maybe I will someday regret removing the microphone wires).</p>
 
-<p>The underside of the play/forward/rewind/record buttons can also be seen in this image. They push down on the slotted metal bars, which then push on the various levers and switches that control the tape deck. Getting the buttons to fit into their hinges and sit on the metal bars just right is very annoying - every time I open the case and disturb the button mechanism, I have to spent a bunch of time jiggling the buttons back into place.</p>
+<p>The underside of the play/forward/rewind/record buttons can also be seen in this image. They push down on the slotted metal bars, which then push on the various levers and switches that control the tape deck. Getting the buttons to fit into their hinges and sit on the metal bars just right is very annoying - every time I open the case and disturb the button mechanism, I have to spend a bunch of time jiggling the buttons back into place.</p>
 
 <p><img src="images/case_interior_pcb.jpg" alt="Case interior PCB"></p>
 
@@ -69,8 +69,40 @@
 
 <p>The core of the project is a <a href="http://www.microchip.com/wwwproducts/Devices.aspx?product=RN52">Roving Networks RN-52 Bluetooth Audio module</a> (mounted to SparkFun’s <a href="https://www.sparkfun.com/products/12849">breakout board</a> for this module).</p>
 
+<p><img src="images/bluetooth_power.jpg" alt="Bluetooth module with power"></p>
+
+<p>The first time I powered up the RN-52 module I used 3 rechargable 1.2 volt AA batteries, for a total voltage of 3.6 volts (the RN-52 is a 3.3 volt component, but 3.6 volts is acceptable). It started up without any problems.</p>
+
+<p>The RN-52 can do a lot! It can handle many different Bluetooth versions and profiles, and accepts configuration and commands via a UART console interface. I’m only using a subset of what it’s capable of.</p>
+
+<p><img src="images/bluetooth_testconnections.jpg" alt="Bluetooth module with many test connections"></p>
+
+<p>I made many temporary connections to the Bluetooth module to test it. Here I’ve got it hooked up to a <a href="https://www.sparkfun.com/products/11736">SparkFun FT231X breakout board</a> for communicating with the module’s console interface via USB on my laptop, and I’ve got it’s audio outputs (poorly) clipped to a pair of headphones.</p>
+
+<p>The console interface offers <a href="http://cdn.sparkfun.com/datasheets/Wireless/Bluetooth/rn-bt-audio-ug-2.0r.pdf">a lot of settings</a>, but the defaults were pretty close to what I wanted. The only changes I made were setting the device name to "FisherPrice" (this is the name that will appear when pairing), and enabling AVRCP (Audio/Video Remote Control Profile) so that I could use the RN-52's GPIO pins to send play/pause, next/previous, and volume commands. Instructions for enabling the AVRCP were pretty well hidden - luckily, the <a href="https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide">SparkFun RN-52 Bluetooth Hookup Guide</a> covers this feature, and links to the <a href="https://cdn.sparkfun.com/assets/a/c/f/d/1/5217c61e757b7fe7748b4568.PDF">Command Specifications</a> document which has even more detail.</p>
+
+<p>The RN-52 offers stereo differential audio outputs, which can be connected directly to speakers without using an external amplifier. I was concerned that this might not be loud enough, and I also wanted to attempt to use the Fisher-Price tape recorder’s original single mono speaker, so some more components were needed for the audio output.</p>
+
+<p>I added another amplifier, which would take the RN-52's pre-amplified output as an input. I used a <a href="https://www.sparkfun.com/products/11044">SparkFun TPA2005D1 Mono Audio Amp Breakout</a>. This is a class-D amplifier based on the Texas Instruments TPA2005D1. It defaults to a 2x gain, but provides the option to solder more resistors to the board to achieve even higher gain.</p>
+
+<p>I needed to sum the left and right outputs of the RN-52 to be able to attach them both to the mono audio amp’s single input. I searched around for suggestions for a circuit to do this, and came up with putting resistors (I used 680Ω) in series with each differential output, then attaching both positive outputs to the amp’s positive input and both negative outputs to the amp’s negative input. This seemed to work, although it also seemed to lose some volume in the process.</p>
+
+<p><img src="images/breadboard.jpg" alt="Breadboard with summing circuit, rotary encoder"></p>
+
+<p>Here’s the left/right summing circuit - inputs on the bottom, outputs on the top. I also added a 10KΩ resistor between the outputs. When I took this photo, I had already started using some of the remaining space on this breadboard for other connections. The rotary encoder for the volume knob can be seen on the left. On the right side, I used this board for power distribution - only a ground bus is connected now, but eventually I'd also add a 3.3v bus and a 6v bus.</p>
+
+<p>I measured the impedance of the original speaker to be 32Ω - higher than the 8Ω the mono audio amp was designed for. I figured this was another reason for relatively low volume, and eventually replaced it with an 8Ω speaker (a <a href="http://www.cui.com/product/resource/gf0771.pdf">CUI GF0771</a> I ordered from <a href="https://www.digikey.com">DigiKey</a>). This surprisingly (to me, anyway, with my poor understanding of speaker impedance) did not result in significantly louder output. Eventually I added more resistors to the TPA2005D1 board to increase the gain even further - that helped. The volume level still isn't earth-shaking, but practically it's usable.</p>
+
 <h3>
 <a id="power" class="anchor" href="#power" aria-hidden="true"><span class="octicon octicon-link"></span></a>Power</h3>
+
+<p>For a power source, I use C batteries in the original 4 battery compartment. 4 C batteries at 1.5 volts each provides 6 volts. This is almost perfect for the mono audio amp (which suggests 5.5 volts max, with an absolute maximum of 6 volts - I just run it at 6 volts), but the RN-52 requires 3.3 volts. I needed a voltage regulator to provide power from these batteries at a voltage level appropriate for the RN-52. Unrelatedly, I also needed a microcontroller to read the volume knob rotary encoder and write to the RN-52 volume up and down pins. The <a href="https://www.sparkfun.com/products/11114">SparkFun Arduino Pro Mini 328 - 3.3V/8MHz</a> serves both purposes. It has a 3.3 volt voltage regulator that provides power to both the Arduino and the RN-52, as well as a microcontroller and an excellent software library for reading from rotary encoders.</p>
+
+<p>I needed to add a new power switch to turn it all on and off. The original electronics didn’t have a power switch for the whole system, and I didn’t want to leave the electronics on all the time, or have to pull out batteries to turn it off. I struggled to find a relatively accessible spot to add a power switch that didn’t affect the original aesthetics too much. Eventually I found a little spot underneath the cassette tape holder where I could hot glue a simple plastic DPST on-off switch. The hot connection from the battery compartment is switched directly using this switch, rather than using a relay, so the full current is passing through the switch - in practice, this hasn't yet been a problem.</p>
+
+<p><img src="images/powerswitch.jpg" alt="Power switch mounted underneath tape deck"></p>
+
+<p>Look closely at the bottom center of the cassette tape holder, and you can make out the tiny black plastic power switch. You can also see an eerie red glow from the power LEDs on the Bluetooth audio board and the amplifier board.</p>
 
 <h3>
 <a id="volume-control" class="anchor" href="#volume-control" aria-hidden="true"><span class="octicon octicon-link"></span></a>Volume Control</h3>
