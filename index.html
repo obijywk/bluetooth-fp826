@@ -89,7 +89,7 @@
 
 <p><img src="images/breadboard.jpg" alt="Breadboard with summing circuit, rotary encoder"></p>
 
-<p>Here’s the left/right summing circuit - inputs on the bottom, outputs on the top. I also added a 10KΩ resistor between the outputs. When I took this photo, I had already started using some of the remaining space on this breadboard for other connections. The rotary encoder for the volume knob can be seen on the left. On the right side, I used this board for power distribution - only a ground bus is connected now, but eventually I'd also add a 3.3v bus and a 6v bus.</p>
+<p>Here’s the left/right summing circuit - inputs on the bottom, outputs on the top. I also added a 10KΩ resistor between the outputs. When I took this photo, I had already started using some of the remaining space on this breadboard for other connections. The rotary encoder for the volume knob can be seen on the left. On the right side, I used this board for power distribution - only a ground bus is connected in this image, but eventually I'd also add a +3.3v bus and a +6v bus.</p>
 
 <p>I measured the impedance of the original speaker to be 32Ω - higher than the 8Ω the mono audio amp was designed for. I figured this was another reason for relatively low volume, and eventually replaced it with an 8Ω speaker (a <a href="http://www.cui.com/product/resource/gf0771.pdf">CUI GF0771</a> I ordered from <a href="https://www.digikey.com">DigiKey</a>). This surprisingly (to me, anyway, with my poor understanding of speaker impedance) did not result in significantly louder output. Eventually I added more resistors to the TPA2005D1 board to increase the gain even further - that helped. The volume level still isn't earth-shaking, but practically it's usable.</p>
 
@@ -98,14 +98,58 @@
 
 <p>For a power source, I use C batteries in the original 4 battery compartment. 4 C batteries at 1.5 volts each provides 6 volts. This is almost perfect for the mono audio amp (which suggests 5.5 volts max, with an absolute maximum of 6 volts - I just run it at 6 volts), but the RN-52 requires 3.3 volts. I needed a voltage regulator to provide power from these batteries at a voltage level appropriate for the RN-52. Unrelatedly, I also needed a microcontroller to read the volume knob rotary encoder and write to the RN-52 volume up and down pins. The <a href="https://www.sparkfun.com/products/11114">SparkFun Arduino Pro Mini 328 - 3.3V/8MHz</a> serves both purposes. It has a 3.3 volt voltage regulator that provides power to both the Arduino and the RN-52, as well as a microcontroller and an excellent software library for reading from rotary encoders.</p>
 
-<p>I needed to add a new power switch to turn it all on and off. The original electronics didn’t have a power switch for the whole system, and I didn’t want to leave the electronics on all the time, or have to pull out batteries to turn it off. I struggled to find a relatively accessible spot to add a power switch that didn’t affect the original aesthetics too much. Eventually I found a little spot underneath the cassette tape holder where I could hot glue a simple plastic DPST on-off switch. The hot connection from the battery compartment is switched directly using this switch, rather than using a relay, so the full current is passing through the switch - in practice, this hasn't yet been a problem.</p>
+<p>I needed to add a new power switch to turn it all on and off. The original electronics didn’t have a power switch for the whole system, and I didn’t want to leave the electronics on all the time, or have to pull out batteries to turn it off, or start messing around with low-power modes. I struggled to find a relatively accessible spot to add a power switch that didn’t affect the original aesthetics too much. Eventually I found a little spot underneath the cassette tape holder where I could hot glue a simple plastic DPST on-off switch. The hot connection from the battery compartment is switched directly using this switch, rather than using a relay, so the full current is passing through the switch - in practice, this hasn't yet been a problem.</p>
 
 <p><img src="images/powerswitch.jpg" alt="Power switch mounted underneath tape deck"></p>
 
-<p>Look closely at the bottom center of the cassette tape holder, and you can make out the tiny black plastic power switch. You can also see an eerie red glow from the power LEDs on the Bluetooth audio board and the amplifier board.</p>
+<p>Look closely at the bottom center of the cassette tape holder, and you can make out the tiny black plastic power switch. You can also see the red glow from the power LEDs on the Bluetooth audio board and the amplifier board.</p>
 
 <h3>
 <a id="volume-control" class="anchor" href="#volume-control" aria-hidden="true"><span class="octicon octicon-link"></span></a>Volume Control</h3>
+
+<p>I was lucky that this <a href="https://www.sparkfun.com/products/9117">12-step Rotary Encoder</a> I ordered from SparkFun just happened to fit the volume knob perfectly (it had a D-shaped post that I suppose is fairly standard). I guess some things haven’t changed since 1987. I connected the rotary encoder to the Arduino and installed the <a href="http://www.pjrc.com/teensy/td_libs_Encoder.html">Encoder library</a> from PJRC. This made it really easy to tell when the volume knob was clicked up or down, and I wrote a sketch to pull down the volume up or volume down pins on the RN-52 each time this happened.</p>
+
+<pre><code>#include &lt;Encoder.h&gt;
+
+#define ENC_A 2
+#define ENC_B 3
+#define VOL_UP 8
+#define VOL_DOWN 9
+#define LED 13
+
+#define BUTTON_PRESS_DELAY 100
+
+Encoder encoder(ENC_A, ENC_B);
+int lastValue = 0;
+
+void setup() {         
+  pinMode(VOL_UP, OUTPUT);
+  digitalWrite(VOL_UP, HIGH);
+
+  pinMode(VOL_DOWN, OUTPUT);
+  digitalWrite(VOL_DOWN, HIGH);
+
+  pinMode(LED, OUTPUT);
+}
+
+void loop() {
+  int value = encoder.read();
+  if (value &lt; lastValue) {
+digitalWrite(VOL_UP, LOW);
+digitalWrite(LED, HIGH);
+delay(BUTTON_PRESS_DELAY);
+digitalWrite(VOL_UP, HIGH);
+digitalWrite(LED, LOW);
+  } else if (value &gt; lastValue) {
+digitalWrite(VOL_DOWN, LOW);
+digitalWrite(LED, HIGH);
+delay(BUTTON_PRESS_DELAY);
+digitalWrite(VOL_DOWN, HIGH);
+digitalWrite(LED, LOW);
+  }
+  lastValue = value;
+}
+</code></pre>
 
 <h3>
 <a id="button-controls" class="anchor" href="#button-controls" aria-hidden="true"><span class="octicon octicon-link"></span></a>Button Controls</h3>
