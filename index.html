@@ -91,7 +91,7 @@
 
 <p>Here’s the left/right summing circuit - inputs on the bottom, outputs on the top. I also added a 10KΩ resistor between the outputs. When I took this photo, I had already started using some of the remaining space on this breadboard for other connections. The rotary encoder for the volume knob can be seen on the left. On the right side, I used this board for power distribution - only a ground bus is connected in this image, but eventually I'd also add a +3.3v bus and a +6v bus.</p>
 
-<p>I measured the impedance of the original speaker to be 32Ω - higher than the 8Ω the mono audio amp was designed for. I figured this was another reason for relatively low volume, and eventually replaced it with an 8Ω speaker (a <a href="http://www.cui.com/product/resource/gf0771.pdf">CUI GF0771</a> I ordered from <a href="https://www.digikey.com">DigiKey</a>). This surprisingly (to me, anyway, with my poor understanding of speaker impedance) did not result in significantly louder output. Eventually I added more resistors to the TPA2005D1 board to increase the gain even further - that helped. The volume level still isn't earth-shaking, but practically it's usable.</p>
+<p>I measured the impedance of the original speaker to be 32Ω - higher than the 8Ω the mono audio amp was designed for. I figured this was another reason for relatively low volume, and eventually replaced it with an 8Ω speaker (a <a href="http://www.cui.com/product/resource/gf0771.pdf">CUI GF0771</a> I ordered from <a href="https://www.digikey.com">DigiKey</a>). This surprisingly (to me, anyway, with my poor understanding of speaker impedance) did not result in significantly louder output. Eventually I added more resistors (47KΩ) to the TPA2005D1 board to increase the gain even further - that helped. The volume level still isn't earth-shaking, but practically it's usable.</p>
 
 <h3>
 <a id="power" class="anchor" href="#power" aria-hidden="true"><span class="octicon octicon-link"></span></a>Power</h3>
@@ -150,6 +150,78 @@ void loop() {
   lastValue = value;
 }
 </code></pre>
+
+<p>Getting the rotary encoder PCB (a <a href="https://www.sparkfun.com/products/12702">SparkFun Solder-able Breadboard - Mini</a>) to stay in the correct place relative to the volume knob slot was a challenge. After several unsatisfactory attempts using layers of double-sided tape, I decided it was time to get serious, and designed a custom 3D printed part to keep the PCB in place.</p>
+
+<p><img src="images/pcbslot.png" alt="3D rendering of PCB slot adapter"></p>
+
+<p>I designed this PCB slot “adapter” using <a href="http://www.openscad.org/">OpenSCAD</a>. It's designed to fit in the same slot as the original PCB, and hold my new, smaller PCB in the correct place relative to the volume knob slot on top of the tape recorder. I had to be careful to leave some gaps where it would be blocked by plastic pieces of the tape recorder case.</p>
+
+<p>Below is the text of the OpenSCAD file I used to model this. Where the comments don’t match the actual values, that’s where my original measurements didn’t quite work out and I tweaked the numbers a little bit. The final fit was still a little tight, I might have tweaked a few of the numbers even smaller if I were to do another print.</p>
+
+<pre><code>// slot height = 3 5/16" = 84mm
+cardHeight = 81;
+// slot depth = 1 11/16" = 43mm
+cardDepth = 43;
+// slot width = 2mm
+cardWidth = 1.7;
+// pcb top = 6mm from slot top
+pcbFromTop = 6;
+// pcb height = 1 13/16" = 46mm
+pcbHeight = 43;
+// pcb depth = 1 5/16" = 33mm
+pcbDepth = 33;
+// pcb width = 2mm
+pcbWidth = 3;
+
+postFromTop = 24;
+postGapSize = 13;
+
+deepMaterialStart = pcbFromTop - 4;
+
+difference() {
+  union() {
+    // most of the card
+    cube(size = [cardHeight, cardWidth, cardDepth], center = false);
+    // make deep only where the PCB goes
+    translate([deepMaterialStart, cardWidth, 0]) {
+      cube(size = [pcbHeight + pcbWidth * 4, pcbWidth, cardDepth], center = false);
+    }
+  }
+
+  // make space for the posts
+  translate([postFromTop, cardWidth, 0]) {
+    cube(size = [postGapSize, pcbWidth, cardDepth]);
+  }
+
+  // remove some deep material to fit bottom slot
+  translate([0, cardWidth * 2 + pcbWidth, 0]) {
+    rotate([90, 0, 0]) {
+      linear_extrude(height = cardWidth + pcbWidth, center = false) {
+        polygon(points = [
+          [deepMaterialStart, -1],
+          [deepMaterialStart, cardDepth - pcbDepth - 2],
+          [24, -1]],
+          paths=[[0,1,2]]);
+      }
+    }
+  }  
+
+  // remove card body where pcb goes
+  translate([pcbFromTop, 0, cardDepth - pcbDepth]) {
+    cube(size = [pcbHeight, cardWidth + pcbWidth, pcbDepth], center = false);
+  }
+
+  // remove a little more to make a pcb slot
+  translate([pcbFromTop - pcbWidth, cardWidth / 2, cardDepth - pcbDepth]) {
+    cube(size = [pcbHeight + pcbWidth * 2, pcbWidth, pcbDepth], center = false);
+  } 
+}
+</code></pre>
+
+<p><img src="images/pcbslot_inplace.png" alt="PCB slot adapter in place"></p>
+
+<p>Here’s the final PCB slot "adapter" in-place in the build. The <a href="https://ultimaker.com/en/products/ultimaker-original">Ultimaker</a> I used just happened to have green filament loaded at the time I made the print - the color didn't matter since this wouldn't be visible from outside the case. It took a few prints to get it to fit well enough - I am guilty of relying a little too much on trial-and-error when 3D printing parts, instead of measuring more carefully, as it’s so easy to make minor tweaks and try another print.</p>
 
 <h3>
 <a id="button-controls" class="anchor" href="#button-controls" aria-hidden="true"><span class="octicon octicon-link"></span></a>Button Controls</h3>
