@@ -225,6 +225,20 @@ difference() {
 
 <h3>
 <a id="button-controls" class="anchor" href="#button-controls" aria-hidden="true"><span class="octicon octicon-link"></span></a>Button Controls</h3>
+
+<p>The first step toward getting the buttons working was to change their mechanical behavior. When there was no tape loaded, the play and record buttons could not be pressed at all, and when there was a tape loaded, the play and record buttons "stuck" until Stop/Eject was pressed. Neither of these behaviors were what I needed to match the AVRCP functionality, which has a momentary play/pause button press.</p>
+
+<p>After some poking around with the springs and levers, I managed to find some spots that I could modify to get the mechanical behavior I wanted (momentary press/release of all button presses). There is a lever that is pushed down when a tape is inserted - I locked it in place using some double-sided tape. Once this was done, I could get all of the buttons to release instantly by holding down the Stop/Eject button. I found the lever that the Stop/Eject button was activating, and used some hot glue to lock it in place.</p>
+
+<p>The electronics for detecting button presses were more challenging. There didn't appear to be a good way to mount the <a href="https://www.sparkfun.com/products/9414">microswitches</a> I had such that they could be triggered by the motion of the buttons or the vertical metal button bars. The switches were also too large. I ended up not using them.</p>
+
+<p>After some experimentation, the solution that finally worked was simply hot-gluing a stripped stranded wire to each of the vertical metal button bars. Hot glue itself didn't stick well to the metal button bars, so I wound up sticking some double-sided tape to each metal button bar, and hot-gluing the wire insulation to the tape. When each button is pressed, its exposed stranded wire moves downward and makes contact with a horizontal metal bar that runs in front of the vertical metal button bars. By grounding the horizontal metal bar, each button's wire is floating when the button is not pressed, but pulled low when the button is pressed - exactly the signals that the RN-52 Bluetooth audio module needs for the AVRCP commands.</p>
+
+<p><img src="images/button_wires.jpg" alt="Button wires"></p>
+
+<p>I've outlined some interesting spots in this photo - the ground connection to the horizontal metal "ground" bar, and the exposed stranded wires and the spots where they make contact with the ground bar.</p>
+
+<p>This is obviously not a great solution - it hasn't fallen apart yet, but I don't expect it to last forever. Some improvements I've considered are using a better glue to attach the plastic wire insulation directly to the metal bars (maybe jewelry epoxy), and using a solid metal pin to make contact with the ground bar instead of stranded wire which will get bent out of shape over time.</p>
       </section>
     </div>
 
