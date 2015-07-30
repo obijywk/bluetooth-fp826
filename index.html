@@ -135,17 +135,17 @@ void setup() {
 void loop() {
   int value = encoder.read();
   if (value &lt; lastValue) {
-digitalWrite(VOL_UP, LOW);
-digitalWrite(LED, HIGH);
-delay(BUTTON_PRESS_DELAY);
-digitalWrite(VOL_UP, HIGH);
-digitalWrite(LED, LOW);
+    digitalWrite(VOL_UP, LOW);
+    digitalWrite(LED, HIGH);
+    delay(BUTTON_PRESS_DELAY);
+    digitalWrite(VOL_UP, HIGH);
+    digitalWrite(LED, LOW);
   } else if (value &gt; lastValue) {
-digitalWrite(VOL_DOWN, LOW);
-digitalWrite(LED, HIGH);
-delay(BUTTON_PRESS_DELAY);
-digitalWrite(VOL_DOWN, HIGH);
-digitalWrite(LED, LOW);
+    digitalWrite(VOL_DOWN, LOW);
+    digitalWrite(LED, HIGH);
+    delay(BUTTON_PRESS_DELAY);
+    digitalWrite(VOL_DOWN, HIGH);
+    digitalWrite(LED, LOW);
   }
   lastValue = value;
 }
