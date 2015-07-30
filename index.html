@@ -109,6 +109,8 @@
 
 <p>I was lucky that this <a href="https://www.sparkfun.com/products/9117">12-step Rotary Encoder</a> I ordered from SparkFun just happened to fit the volume knob perfectly (it had a D-shaped post that I suppose is fairly standard). I guess some things haven’t changed since 1987. I connected the rotary encoder to the Arduino and installed the <a href="http://www.pjrc.com/teensy/td_libs_Encoder.html">Encoder library</a> from PJRC. This made it really easy to tell when the volume knob was clicked up or down, and I wrote a sketch to pull down the volume up or volume down pins on the RN-52 each time this happened.</p>
 
+<p><a href="https://github.com/obijywk/bluetooth-fp826/blob/master/volume.ino">volume.ino</a></p>
+
 <pre><code>#include &lt;Encoder.h&gt;
 
 #define ENC_A 2
@@ -158,6 +160,8 @@ void loop() {
 <p>I designed this PCB slot “adapter” using <a href="http://www.openscad.org/">OpenSCAD</a>. It's designed to fit in the same slot as the original PCB, and hold my new, smaller PCB in the correct place relative to the volume knob slot on top of the tape recorder. I had to be careful to leave some gaps where it would be blocked by plastic pieces of the tape recorder case.</p>
 
 <p>Below is the text of the OpenSCAD file I used to model this. Where the comments don’t match the actual values, that’s where my original measurements didn’t quite work out and I tweaked the numbers a little bit. The final fit was still a little tight, I might have tweaked a few of the numbers even smaller if I were to do another print.</p>
+
+<p><a href="https://github.com/obijywk/bluetooth-fp826/blob/master/pcbslot.scad">pcbslot.scad</a></p>
 
 <pre><code>// slot height = 3 5/16" = 84mm
 cardHeight = 81;
