@@ -102,7 +102,9 @@
 
 <p>For a power source, I use C batteries in the original 4 battery compartment. 4 C batteries at 1.5 volts each provides 6 volts. This is almost perfect for the mono audio amp (which suggests 5.5 volts max, with an absolute maximum of 6 volts - I just run it at 6 volts), but the RN-52 requires 3.3 volts. I needed a voltage regulator to provide power from these batteries at a voltage level appropriate for the RN-52. Unrelatedly, I also needed a microcontroller to read the volume knob rotary encoder and write to the RN-52 volume up and down pins. The <a href="https://www.sparkfun.com/products/11114">SparkFun Arduino Pro Mini 328 - 3.3V/8MHz</a> serves both purposes. It has a 3.3 volt voltage regulator that provides power to both the Arduino and the RN-52, as well as a microcontroller and an excellent software library for reading from rotary encoders.</p>
 
-<p>I needed to add a new power switch to turn it all on and off. The original electronics didn’t have a power switch for the whole system, and I didn’t want to leave the electronics on all the time, or have to pull out batteries to turn it off, or start messing around with low-power modes. I struggled to find a relatively accessible spot to add a power switch that didn’t affect the original aesthetics too much. Eventually I found a little spot underneath the cassette tape holder where I could hot glue a simple plastic DPST on-off switch. The hot connection from the battery compartment is switched directly using this switch, rather than using a relay, so the full current is passing through the switch - in practice, this hasn't yet been a problem.</p>
+<p>I needed to add a new power switch to turn it all on and off. The original electronics didn’t have a power switch for the whole system, and I didn’t want to leave the electronics on all the time, or have to pull out batteries to turn it off, or start messing around with low-power modes. I couldn't figure out an easy way to use one of the existing buttons as a power button (e.g. Record, which I didn't need for anything else), because that would require either a mechanical switch that could be toggled by a button press, or a button press detector that was always on.</p>
+
+<p>I struggled to find a relatively accessible spot to add a power switch that didn’t affect the original aesthetics too much. Eventually I found a little spot underneath the cassette tape holder where I could hot glue a simple plastic DPST on-off switch. The hot connection from the battery compartment is switched directly using this switch, rather than using a relay, so the full current is passing through the switch - in practice, this hasn't yet been a problem.</p>
 
 <p><img src="images/powerswitch.jpg" alt="Power switch mounted underneath tape deck"></p>
 
@@ -245,6 +247,8 @@ difference() {
 <p><img src="images/button_wires.jpg" alt="Button wires"></p>
 
 <p>I've outlined some interesting spots in this photo - the ground connection to the horizontal metal "ground" bar, and the exposed stranded wires and the spots where they make contact with the ground bar.</p>
+
+<p>The spot I chose for the play/pause wire actually happens to be moved by the record button as well. This was an accident, but it was an easier spot to glue to than a metal bar (because it was plastic), and I didn't need the record button for anything else anyway, so I left it in place. The record button now effectively acts as an additional play/pause button.</p>
 
 <p>This is obviously not a great solution - it hasn't fallen apart yet, but I don't expect it to last forever. Some improvements I've considered are using a better glue to attach the plastic wire insulation directly to the metal bars (maybe jewelry epoxy), and using a solid metal pin to make contact with the ground bar instead of stranded wire which will get bent out of shape over time.</p>
       </section>
