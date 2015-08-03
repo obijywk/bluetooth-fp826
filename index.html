@@ -4,11 +4,11 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Adding Bluetooth audio to an &#39;80s Fisher-Price toy : I gutted my Fisher-Price #826 tape recorder and turned it into a Bluetooth speaker.">
+    <meta name="description" content="Converting an &#39;80s Fisher-Price tape recorder into a Bluetooth speaker : ">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Adding Bluetooth audio to an &#39;80s Fisher-Price toy</title>
+    <title>Converting an &#39;80s Fisher-Price tape recorder into a Bluetooth speaker</title>
   </head>
 
   <body>
@@ -18,8 +18,8 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/obijywk/bluetooth-fp826">View on GitHub</a>
 
-          <h1 id="project_title">Adding Bluetooth audio to an &#39;80s Fisher-Price toy</h1>
-          <h2 id="project_tagline">I gutted my Fisher-Price #826 tape recorder and turned it into a Bluetooth speaker.</h2>
+          <h1 id="project_title">Converting an &#39;80s Fisher-Price tape recorder into a Bluetooth speaker</h1>
+          <h2 id="project_tagline"></h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/obijywk/bluetooth-fp826/zipball/master">Download this project as a .zip file</a>
@@ -48,7 +48,13 @@
 
 <p><img src="images/case_interior_horizontal.jpg" alt="Case interior"></p>
 
+<h4>
+<a id="the-speaker" class="anchor" href="#the-speaker" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Speaker</h4>
+
 <p>There’s a 3" speaker mounted to the back of the case. I was hoping to re-use the speaker as-is, but measured it to have an impedance of 32Ω, which I thought might be a little high for the amplifier components designed for 8Ω speakers that I was planning on using (I expected a too-high impedance might result in low volume, but not damage). I stuck with the original speaker at first, which seemed to work, but eventually I replaced it with an 8Ω speaker of the same size.</p>
+
+<h4>
+<a id="mechanical-and-electronic-components" class="anchor" href="#mechanical-and-electronic-components" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mechanical and Electronic Components</h4>
 
 <p><img src="images/case_interior_closeup.jpg" alt="Case interior closeup"></p>
 
@@ -56,11 +62,17 @@
 
 <p>There was a single PCB in a slot near the right side of the case. I did not intend to reuse any of its electronics. The interesting part here was the volume knob, which I wanted to remain functional. It was attached directly to a potentiometer on the PCB. To get a value from the volume knob, I would either have to keep the existing potentiometer in place and measure it digitally, or replace it with another sensor that fit the volume knob and would sit at the correct location in the case. I decided to replace the PCB and potentiometer, as that gave me the flexibility to use a rotary encoder instead of a potentiometer, and removing the PCB introduced more space for my components around where the PCB used to be. </p>
 
+<h4>
+<a id="fully-disassembled" class="anchor" href="#fully-disassembled" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fully Disassembled</h4>
+
 <p><img src="images/case_interior_fronthalf.jpg" alt="Case interior front half (middle section removed)"></p>
 
 <p>This is the front half of the case, with the middle section of the case removed - this was the most I would ever disassemble the tape recorder. I took it apart this far to remove the thick grey wires for the microphone. I did not intend to try to reuse the microphone, and the microphone wires were in the way taking up a lot of space (although subsequently, using the tape recorder as a giant Bluetooth headset has come up in conversation - maybe I will someday regret removing the microphone wires).</p>
 
 <p>The underside of the play/forward/rewind/record buttons can also be seen in this image. They push down on the slotted metal bars, which then push on the various levers and switches that control the tape deck. Getting the buttons to fit into their hinges and sit on the metal bars just right is very annoying - every time I open the case and disturb the button mechanism, I have to spend a bunch of time jiggling the buttons back into place.</p>
+
+<h4>
+<a id="the-pcb" class="anchor" href="#the-pcb" aria-hidden="true"><span class="octicon octicon-link"></span></a>The PCB</h4>
 
 <p><img src="images/case_interior_pcb.jpg" alt="Case interior PCB"></p>
 
@@ -70,6 +82,9 @@
 <a id="audio-components" class="anchor" href="#audio-components" aria-hidden="true"><span class="octicon octicon-link"></span></a>Audio Components</h3>
 
 <p>Almost all of the parts I used came from <a href="https://www.sparkfun.com">SparkFun</a>, an excellent source of easy-to-use and well-documented hobbyist electronics components.</p>
+
+<h4>
+<a id="the-bluetooth-audio-module" class="anchor" href="#the-bluetooth-audio-module" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Bluetooth Audio Module</h4>
 
 <p>The core of the project is a <a href="http://www.microchip.com/wwwproducts/Devices.aspx?product=RN52">Roving Networks RN-52 Bluetooth Audio module</a> (mounted to SparkFun’s <a href="https://www.sparkfun.com/products/12849">breakout board</a> for this module).</p>
 
@@ -83,7 +98,13 @@
 
 <p>I made many temporary connections to the Bluetooth module to test it. Here I’ve got it hooked up to a <a href="https://www.sparkfun.com/products/11736">SparkFun FT231X breakout board</a> for communicating with the module’s console interface via USB on my laptop, and I’ve got it’s audio outputs (poorly) clipped to a pair of headphones.</p>
 
+<h4>
+<a id="programming-the-bluetooth-audio-module" class="anchor" href="#programming-the-bluetooth-audio-module" aria-hidden="true"><span class="octicon octicon-link"></span></a>Programming the Bluetooth Audio Module</h4>
+
 <p>The console interface offers <a href="http://cdn.sparkfun.com/datasheets/Wireless/Bluetooth/rn-bt-audio-ug-2.0r.pdf">a lot of settings</a>, but the defaults were pretty close to what I wanted. The only changes I made were setting the device name to "FisherPrice" (this is the name that will appear when pairing), and enabling AVRCP (Audio/Video Remote Control Profile) so that I could use the RN-52's GPIO pins to send play/pause, next/previous, and volume commands. Instructions for enabling the AVRCP were pretty well hidden - luckily, the <a href="https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide">SparkFun RN-52 Bluetooth Hookup Guide</a> covers this feature, and links to the <a href="https://cdn.sparkfun.com/assets/a/c/f/d/1/5217c61e757b7fe7748b4568.PDF">Command Specifications</a> document which has even more detail.</p>
+
+<h4>
+<a id="stereo-summing-and-amplification" class="anchor" href="#stereo-summing-and-amplification" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stereo Summing and Amplification</h4>
 
 <p>The RN-52 offers stereo differential audio outputs, which can be connected directly to speakers without using an external amplifier. I was concerned that this might not be loud enough, and I also wanted to attempt to use the Fisher-Price tape recorder’s original single mono speaker, so some more components were needed for the audio output.</p>
 
@@ -101,6 +122,9 @@
 <a id="power" class="anchor" href="#power" aria-hidden="true"><span class="octicon octicon-link"></span></a>Power</h3>
 
 <p>For a power source, I use C batteries in the original 4 battery compartment. 4 C batteries at 1.5 volts each provides 6 volts. This is almost perfect for the mono audio amp (which suggests 5.5 volts max, with an absolute maximum of 6 volts - I just run it at 6 volts), but the RN-52 requires 3.3 volts. I needed a voltage regulator to provide power from these batteries at a voltage level appropriate for the RN-52. Unrelatedly, I also needed a microcontroller to read the volume knob rotary encoder and write to the RN-52 volume up and down pins. The <a href="https://www.sparkfun.com/products/11114">SparkFun Arduino Pro Mini 328 - 3.3V/8MHz</a> serves both purposes. It has a 3.3 volt voltage regulator that provides power to both the Arduino and the RN-52, as well as a microcontroller and an excellent software library for reading from rotary encoders.</p>
+
+<h4>
+<a id="power-switch" class="anchor" href="#power-switch" aria-hidden="true"><span class="octicon octicon-link"></span></a>Power Switch</h4>
 
 <p>I needed to add a new power switch to turn it all on and off. The original electronics didn’t have a power switch for the whole system, and I didn’t want to leave the electronics on all the time, or have to pull out batteries to turn it off, or start messing around with low-power modes. I couldn't figure out an easy way to use one of the existing buttons as a power button (e.g. Record, which I didn't need for anything else), because that would require either a mechanical switch that could be toggled by a button press, or a button press detector that was always on.</p>
 
@@ -240,6 +264,9 @@ difference() {
 
 <p>After some poking around with the springs and levers, I managed to find some spots that I could modify to get the mechanical behavior I wanted (momentary press/release of all button presses). There is a lever that is pushed down when a tape is inserted - I locked it in place using some double-sided tape. Once this was done, I could get all of the buttons to release instantly by holding down the Stop/Eject button. I found the lever that the Stop/Eject button was activating, and used some hot glue to lock it in place.</p>
 
+<h4>
+<a id="detecting-button-presses" class="anchor" href="#detecting-button-presses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Detecting Button Presses</h4>
+
 <p>The electronics for detecting button presses were more challenging. There didn't appear to be a good way to mount the <a href="https://www.sparkfun.com/products/9414">microswitches</a> I had such that they could be triggered by the motion of the buttons or the vertical metal button bars. The switches were also too large. I ended up not using them.</p>
 
 <p>After some experimentation, the solution that finally worked was simply hot-gluing a stripped stranded wire to each of the vertical metal button bars. Hot glue itself didn't stick well to the metal button bars, so I wound up sticking some double-sided tape to each metal button bar, and hot-gluing the wire insulation to the tape. When each button is pressed, its exposed stranded wire moves downward and makes contact with a horizontal metal bar that runs in front of the vertical metal button bars. By grounding the horizontal metal bar, each button's wire is floating when the button is not pressed, but pulled low when the button is pressed - exactly the signals that the RN-52 Bluetooth audio module needs for the AVRCP commands.</p>
@@ -257,7 +284,7 @@ difference() {
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Adding Bluetooth audio to an &#39;80s Fisher-Price toy maintained by <a href="https://github.com/obijywk">obijywk</a></p>
+        <p class="copyright">Converting an &#39;80s Fisher-Price tape recorder into a Bluetooth speaker maintained by <a href="https://github.com/obijywk">obijywk</a></p>
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
